@@ -1,10 +1,8 @@
-import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { writeFile } from "fs/promises";
-import path from "path";
-import slugify from "slugify";
-
-const prisma = new PrismaClient();
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { writeFile } from 'fs/promises'
+import path from 'path'
+import slugify from 'slugify'
 
 export async function GET() {
   try {
@@ -14,40 +12,40 @@ export async function GET() {
         brand: true,
         productImage: true,
       },
-    });
-    return NextResponse.json(products);
+    })
+    return NextResponse.json(products)
   } catch (error) {
-    console.error("Error fetching products:", error);
-    return NextResponse.error();
+    console.error('Error fetching products:', error)
+    return NextResponse.error()
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const formData = await request.formData();
+    const formData = await request.formData()
     const productData = {
-      name: formData.get("name") as string,
-      description: formData.get("description") as string,
-      categoryId: formData.get("categoryId") as string,
-      brandId: formData.get("brandId") as string,
-      sku: formData.get("sku") as string,
-      qty: parseInt(formData.get("qty") as string),
-      qtyBellowMin: parseInt(formData.get("qtyBellowMin") as string),
-      price: parseFloat(formData.get("price") as string),
-      priceWholeSaller: parseFloat(formData.get("priceWholeSaller") as string),
-      cost: parseFloat(formData.get("priceWholeSaller") as string),
-      promotionalPrice: parseFloat(formData.get("promotionalPrice") as string),
-      showPrice: formData.get("showPrice") === "true",
-      showPriceWholeWaller: formData.get("showPriceWholeWaller") === "true",
-      status: formData.get("status") === "true",
-      attributes: JSON.parse(formData.get("attributes") as string),
-    };
+      name: formData.get('name') as string,
+      description: formData.get('description') as string,
+      categoryId: formData.get('categoryId') as string,
+      brandId: formData.get('brandId') as string,
+      sku: formData.get('sku') as string,
+      qty: parseInt(formData.get('qty') as string),
+      qtyBellowMin: parseInt(formData.get('qtyBellowMin') as string),
+      price: parseFloat(formData.get('price') as string),
+      priceWholeSaller: parseFloat(formData.get('priceWholeSaller') as string),
+      cost: parseFloat(formData.get('priceWholeSaller') as string),
+      promotionalPrice: parseFloat(formData.get('promotionalPrice') as string),
+      showPrice: formData.get('showPrice') === 'true',
+      showPriceWholeWaller: formData.get('showPriceWholeWaller') === 'true',
+      status: formData.get('status') === 'true',
+      attributes: JSON.parse(formData.get('attributes') as string),
+    }
 
-    const images = formData.getAll("images") as File[];
+    const images = formData.getAll('images') as File[]
 
-    const slug = slugify(productData.name, { lower: true, strict: true });
+    const slug = slugify(productData.name, { lower: true, strict: true })
 
     const newProduct = await prisma.products.create({
       data: {
@@ -70,19 +68,19 @@ export async function POST(request: Request) {
           create: productData.attributes,
         },
       },
-    });
+    })
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'products')
 
     const imagePromises = images.map(async (image, index) => {
-      const bytes = await image.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+      const bytes = await image.arrayBuffer()
+      const buffer = Buffer.from(bytes)
       const filename = `${Date.now()}-${slug}-${index + 1}${path.extname(
         image.name
-      )}`;
-      const filepath = path.join(uploadDir, filename);
+      )}`
+      const filepath = path.join(uploadDir, filename)
 
-      await writeFile(filepath, buffer);
+      await writeFile(filepath, buffer)
 
       return prisma.productImage.create({
         data: {
@@ -90,10 +88,10 @@ export async function POST(request: Request) {
           url: `/uploads/products/${filename}`,
           order: index,
         },
-      });
-    });
+      })
+    })
 
-    await Promise.all(imagePromises);
+    await Promise.all(imagePromises)
 
     const createdProduct = await prisma.products.findUnique({
       where: { id: newProduct.id },
@@ -103,16 +101,16 @@ export async function POST(request: Request) {
         productImage: true,
         attributes: true,
       },
-    });
+    })
 
-    return NextResponse.json(createdProduct, { status: 201 });
+    return NextResponse.json(createdProduct, { status: 201 })
   } catch (error) {
-    console.error("Error creating product:", error);
+    console.error('Error creating product:', error)
     return NextResponse.json(
-      { error: "Internal Server Error", details: (error as Error).message },
+      { error: 'Internal Server Error', details: (error as Error).message },
       { status: 500 }
-    );
+    )
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }

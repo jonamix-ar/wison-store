@@ -1,48 +1,46 @@
-import { NextResponse } from "next/server"; // Conect to Prisma
-import { PrismaClient } from "@prisma/client"; // Conect to Prisma
-import bcrypt from "bcryptjs";
-import { z } from "zod";
-
-const prisma = new PrismaClient(); // Conect to Prisma
+import { NextResponse } from 'next/server' // Conect to Prisma
+import { prisma } from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
+import { z } from 'zod'
 
 const userUpdateSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  role: z.enum(["ADMIN", "CUSTOMER", "EMPLOYEE"]),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  role: z.enum(['ADMIN', 'CUSTOMER', 'EMPLOYEE']),
   password: z.string().optional(),
-});
+})
 
 export async function GET() {
   try {
-    const users = await prisma.user.findMany();
-    return NextResponse.json(users);
+    const users = await prisma.user.findMany()
+    return NextResponse.json(users)
   } catch (error) {
-    console.error("Error fetching products:", error);
-    return NextResponse.error();
+    console.error('Error fetching products:', error)
+    return NextResponse.error()
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { name, email, password, role } = body;
+    const body = await request.json()
+    const { name, email, password, role } = body
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
-    });
+    })
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "User already exists" },
+        { error: 'User already exists' },
         { status: 400 }
-      );
+      )
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     // Create user with associated profile and activity
     const newUser = await prisma.user.create({
@@ -59,12 +57,12 @@ export async function POST(request: Request) {
         },
         activity: {
           create: {
-            lastIp: request.headers.get("x-forwarded-for") || "unknown",
+            lastIp: request.headers.get('x-forwarded-for') || 'unknown',
             registerIp:
-              request.headers.get("x-forwarded-for") ||
-              request.headers.get("x-real-ip") ||
-              "unknown",
-            agent: request.headers.get("user-agent") || "unknown",
+              request.headers.get('x-forwarded-for') ||
+              request.headers.get('x-real-ip') ||
+              'unknown',
+            agent: request.headers.get('user-agent') || 'unknown',
           },
         },
       },
@@ -72,17 +70,17 @@ export async function POST(request: Request) {
         profile: true,
         activity: true,
       },
-    });
+    })
 
     // Remove sensitive information before sending the response
-    const { password: _, ...userWithoutPassword } = newUser;
+    const { password: _, ...userWithoutPassword } = newUser
 
-    return NextResponse.json(userWithoutPassword, { status: 201 });
+    return NextResponse.json(userWithoutPassword, { status: 201 })
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error('Error creating user:', error)
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: 'Internal server error' },
       { status: 500 }
-    );
+    )
   }
 }

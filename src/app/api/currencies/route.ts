@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import axios from 'axios'
-
-const prisma = new PrismaClient()
 
 export async function GET() {
   console.log('GET request received for /api/currencies')

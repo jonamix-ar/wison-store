@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import path from 'path'
 import { writeFile } from 'fs/promises'
-
-const prisma = new PrismaClient()
 
 export async function GET(
   request: Request,
