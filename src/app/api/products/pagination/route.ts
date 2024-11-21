@@ -3,6 +3,8 @@ import { Prisma, PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
@@ -80,8 +82,12 @@ function getOrderBy(sort: string): Prisma.ProductsOrderByWithRelationInput {
   }
 }
 
-function getQueryConditions(search: string, brands: string, state: string) {
-  const conditions: any = {}
+function getQueryConditions(
+  search: string,
+  brands: string,
+  state: string
+): Prisma.ProductsWhereInput {
+  const conditions: Prisma.ProductsWhereInput = {}
 
   if (search) {
     const searchLower = search.toLowerCase()
@@ -103,13 +109,21 @@ function getQueryConditions(search: string, brands: string, state: string) {
   }
 
   if (state && ['NEW', 'USED', 'REFURBISHED'].includes(state)) {
-    conditions.state = state
+    conditions.state = state as 'NEW' | 'USED' | 'REFURBISHED'
   }
 
   return conditions
 }
 
-function formatProduct(product: any) {
+function formatProduct(
+  product: Prisma.ProductsGetPayload<{
+    include: {
+      category: { select: { id: true; name: true } }
+      brand: { select: { id: true; name: true } }
+      productImage: { select: { id: true; url: true } }
+    }
+  }>
+) {
   return {
     ...product,
     price: product.price.toNumber(),

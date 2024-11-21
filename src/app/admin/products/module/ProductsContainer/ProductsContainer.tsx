@@ -15,6 +15,11 @@ interface ProductsContainerProps {
   searchTerm: string;
 }
 
+// Define a new interface that extends Product but with price as string
+interface ProductWithStringPrice extends Omit<Product, 'price'> {
+  price: string;
+}
+
 const ProductsContainer: React.FC<ProductsContainerProps> = ({
   viewMode,
   pageSize,
@@ -50,6 +55,14 @@ const ProductsContainer: React.FC<ProductsContainerProps> = ({
     );
   }, [products, searchTerm]);
 
+  // Convert the price to string for ProductGrid
+  const productsWithStringPrice: ProductWithStringPrice[] = useMemo(() => {
+    return filteredProducts.map(product => ({
+      ...product,
+      price: product.price.toString()
+    }));
+  }, [filteredProducts]);
+
   return (
     <>
       {filteredProducts.length > 0 ? (
@@ -60,7 +73,7 @@ const ProductsContainer: React.FC<ProductsContainerProps> = ({
             columns={columns}
           />
         ) : (
-          <ProductGrid products={filteredProducts} />
+          <ProductGrid products={productsWithStringPrice} />
         )
       ) : (
         <EmptyBig

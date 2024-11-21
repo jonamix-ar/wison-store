@@ -7,6 +7,7 @@ const nextConfig = {
       'placehold.co',
       'localhost:3000',
       'localhost',
+      'wison.nextweb.com.ar',
     ], // Agrega este dominio
   },
   poweredByHeader: false,

@@ -14,11 +14,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching currencies:', error)
     return NextResponse.json(
-      {
-        error: 'Error fetching currencies',
-        details: error.message,
-        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-      },
+      { error: 'Failed to create brand', details: (error as Error).message },
       { status: 500 }
     )
   }
@@ -35,11 +31,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error updating currency rate:', error)
     return NextResponse.json(
-      {
-        error: 'Error updating currency rate',
-        details: error.message,
-        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-      },
+      { error: 'Failed to create brand', details: (error as Error).message },
       { status: 500 }
     )
   }
@@ -73,11 +65,7 @@ export async function PUT() {
   } catch (error) {
     console.error('Error updating currency rates:', error)
     return NextResponse.json(
-      {
-        error: 'Error updating currency rates',
-        details: error.message,
-        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-      },
+      { error: 'Failed to create brand', details: (error as Error).message },
       { status: 500 }
     )
   }
