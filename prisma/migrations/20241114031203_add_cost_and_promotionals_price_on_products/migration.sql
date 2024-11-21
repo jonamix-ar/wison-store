@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `products` ADD COLUMN `cost` DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
+    ADD COLUMN `promotionalPrice` DECIMAL(15, 2) NOT NULL DEFAULT 0.00;
