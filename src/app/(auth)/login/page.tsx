@@ -52,8 +52,8 @@ export default function LoginPage() {
         <div className="w-full md:w-1/2 flex flex-col justify-center items-center bg-black rounded-[30px] p-6 md:p-4">
           <div className="mb-4">
             <Image
-              src="/assets/Alta-Blanco.png"
-              alt="Alta Telefonia Logo"
+              src="/assets/logo_wison.webp"
+              alt="Winson Logo"
               width={200}
               height={200}
             />

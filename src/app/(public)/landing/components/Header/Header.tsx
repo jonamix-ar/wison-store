@@ -26,7 +26,7 @@ export default function Header({ onCartClick }: HeaderProps) {
                             </button>
                             <div className="relative w-full">
                                 <Image
-                                    src="/assets/logo_wilson.webp"
+                                    src="/assets/logo_wison.webp"
                                     alt="Logo Wilson"
                                     width={80}
                                     height={80}
