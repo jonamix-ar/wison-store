@@ -103,8 +103,8 @@ export default function Component({ isOpen, onClose }: SidebarProps) {
                   key={subItem.label}
                   href={subItem.href}
                   className={`flex items-center gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-white/10 hover:text-white ${pathname.startsWith(subItem.href)
-                      ? "bg-white/10 text-white"
-                      : ""
+                    ? "bg-white/10 text-white"
+                    : ""
                     }`}
                 >
                   <subItem.icon className="h-4 w-4" />
@@ -136,10 +136,10 @@ export default function Component({ isOpen, onClose }: SidebarProps) {
             
           </button> */}
           <Image
-            src="/assets/logo_wilson.webp"
+            src="/assets/logo_wison.webp"
             alt="Logo Wilson"
-            width={100}
-            height={100}
+            width={80}
+            height={80}
           />
         </div>
         <div className="p-4">

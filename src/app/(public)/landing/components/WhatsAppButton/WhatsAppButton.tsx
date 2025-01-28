@@ -22,7 +22,7 @@ export default function WhatsAppButton() {
     }, [])
 
     const openWhatsApp = () => {
-        window.open('https://wa.me/1234567890', '_blank')
+        window.open('https://wa.me/5493425434344', '_blank')
     }
 
     return (

@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import CustomerHeader from "@/components/Customers/CustomerHeader/CustomerHeader";
+import CustomerContainer from "@/components/Customers/CustomerContainer/CustomerContainer";
 
-export default function CustomerPage() {
+export default function CustomerPages() {
     const [pageSize, setPageSize] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
     const columns = [
@@ -20,8 +22,21 @@ export default function CustomerPage() {
 
     return (
         <>
+            <CustomerHeader
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+                columns={columns}
+                visibleColumns={visibleColumns}
+                setVisibleColumns={setVisibleColumns}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+            />
             <div className="mt-4">
-
+                <CustomerContainer
+                    pageSize={pageSize}
+                    columns={columns.filter((col) => visibleColumns.includes(col.id))}
+                    searchTerm={searchTerm}
+                />
             </div>
         </>
     );

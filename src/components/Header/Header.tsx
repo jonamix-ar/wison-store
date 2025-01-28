@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import ProfileDropdown from "@/components/Ui/Dropdowns/ProfileDropdown";
 import Logo from "@/components/common/Logo"; // Ensure this path is correct
 import Breadcrumb from "../Ui/Breadcrumb";
+import Image from "next/image";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -32,22 +33,13 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           <Menu className="h-6 w-6" aria-hidden="true" />
         </button>
         <div className="lg:hidden">
-          <Logo
-            color={"#000"}
-            colorSecondary={"transparent"}
-            stroke={"#000"}
-            className={"w-36 h-36"}
+          <Image
+            src="/assets/logo_wison.webp"
+            alt="Logo Wilson"
+            width={80}
+            height={80}
           />
         </div>
-        {/* <Breadcrumb
-          homeElement={"LIDERCELL"}
-          separator={<span> / </span>}
-          activeClasses="text-amber-500"
-          containerClasses="flex"
-          listClasses="hover:underline mx-2 font-bold"
-          capitalizeLinks
-        /> */}
-        
       </div>
 
       <div className="flex items-center gap-2 sm:gap-4">

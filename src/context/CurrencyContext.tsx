@@ -1,7 +1,8 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import { getAllCurrencies, fetchAndUpdateRates } from '@/services/currency-service'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { fetchAndUpdateRates } from '@/services/currency-service'
+import { toast } from 'react-toastify'
 
 interface Currency {
     id: number
@@ -10,6 +11,9 @@ interface Currency {
     symbol: string
     rate: number
     flagCode: string
+    apiUrl: string | null
+    createdAt: string
+    updatedAt: string
 }
 
 interface CurrencyContextType {
@@ -37,29 +41,37 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         name: 'US Dollar',
         symbol: '$',
         rate: 1,
-        flagCode: 'us'
+        flagCode: 'us',
+        apiUrl: null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
     })
 
     useEffect(() => {
-        const fetchCurrencies = async () => {
-            const fetchedCurrencies = await getAllCurrencies()
-            setCurrencies(fetchedCurrencies)
-            if (fetchedCurrencies.length > 0) {
-                setCurrentCurrency(fetchedCurrencies[0])
+        const updateCurrencies = async () => {
+            const updatedCurrencies = await fetchAndUpdateRates()
+            setCurrencies(updatedCurrencies)
+            if (updatedCurrencies.length > 0) {
+                setCurrentCurrency(prev => {
+                    return updatedCurrencies.find((c: { code: string }) => c.code === prev.code) || updatedCurrencies[0]
+                })
             }
         }
 
-        fetchCurrencies()
-        fetchAndUpdateRates() // Actualiza las tasas al inicio
-
-        // Actualiza las tasas cada hora
-        const interval = setInterval(fetchAndUpdateRates, 60 * 60 * 1000)
+        updateCurrencies()
+        const interval = setInterval(updateCurrencies, 60 * 60 * 1000) // Actualiza cada hora
 
         return () => clearInterval(interval)
     }, [])
 
     const convertPrice = (price: number) => {
-        return price * currentCurrency.rate
+
+        if (currentCurrency.code === 'USD') {
+            // return price + dolarExt
+            return price
+        } else {
+            return currentCurrency.rate * price
+        }
     }
 
     return (

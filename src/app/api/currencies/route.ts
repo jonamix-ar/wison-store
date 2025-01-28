@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
 import axios from 'axios'
+import { prisma } from '@/lib/prisma'
 
 export async function GET() {
   console.log('GET request received for /api/currencies')
@@ -12,7 +12,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching currencies:', error)
     return NextResponse.json(
-      { error: 'Failed to create brand', details: (error as Error).message },
+      { error: 'Internal Server Error', details: (error as Error).message },
       { status: 500 }
     )
   }
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error updating currency rate:', error)
     return NextResponse.json(
-      { error: 'Failed to create brand', details: (error as Error).message },
+      { error: 'Internal Server Error', details: (error as Error).message },
       { status: 500 }
     )
   }
@@ -63,7 +63,7 @@ export async function PUT() {
   } catch (error) {
     console.error('Error updating currency rates:', error)
     return NextResponse.json(
-      { error: 'Failed to create brand', details: (error as Error).message },
+      { error: 'Internal Server Error', details: (error as Error).message },
       { status: 500 }
     )
   }

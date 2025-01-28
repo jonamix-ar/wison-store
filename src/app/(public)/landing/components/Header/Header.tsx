@@ -74,14 +74,14 @@ export default function Header({ onCartClick }: HeaderProps) {
                                     </div>
                                 )}
                             </div>
-
+{/* 
                             <button
                                 onClick={onCartClick}
                                 className="hidden md:flex items-center px-3 py-2 text-gray-600 rounded-md hover:bg-gray-200 hover:text-gray-900 focus:outline-none"
                             >
                                 <ShoppingCart className="h-5 w-5 mr-2" />
                                 Carrito
-                            </button>
+                            </button> */}
                             <Link
                                 href="/login"
                                 className="flex items-center px-3 py-2 text-gray-600 rounded-md hover:bg-gray-200 hover:text-gray-900 focus:outline-none"

@@ -27,5 +27,15 @@ export const API_ENDPOINTS = {
   USER_EDIT: (id: number) => `${API_BASE_URL}/users/${id}`,
   USER_DELETE: (id: number) => `${API_BASE_URL}/users/${id}`,
 
+  CUSTOMERS_INDEX: `${API_BASE_URL}/customers`,
+  CUSTOMER_CREATE: `${API_BASE_URL}/customers`,
+  CUSTOMER_VIEW: (id: number) => `${API_BASE_URL}/customers/${id}`,
+  CUSTOMER_EDIT: (id: number) => `${API_BASE_URL}/customers/${id}`,
+  CUSTOMER_DELETE: (id: number) => `${API_BASE_URL}/customers/${id}`,
+
   CURRENCIES_INDEX: `${API_BASE_URL}/currencies`,
+  // New endpoints for settings
+  COUNTRIES_INDEX: `${API_BASE_URL}/settings/countries`,
+  STATES_INDEX: (countryId: number) =>
+    `${API_BASE_URL}/settings/states/${countryId}`,
 }
